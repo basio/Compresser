@@ -6,33 +6,25 @@ using System.Text;
 using System.Threading.Tasks;
 using Utils;
 
-
 namespace Compresser
 {
     class Huffman : ICompress
     {
-        //encode a number to binary
-        BitArray enocde(int x)
-        {
-            return new BitArray(1);
-        }
-        int decode(BitArray bits)
-        {
-            return 0;
-        }
         public BitArray compress(int[] data)
         {
             HuffmanTree ht = new HuffmanTree();
-            ht.Frequencies = new Dictionary<Int32, int>();
+            ht.Frequencies = new Dictionary<int, int>();
             foreach (int x in data)
             {
-                if (ht.Frequencies.ContainsKey((Int32)x))
+                if (ht.Frequencies.ContainsKey(x))
                     ht.Frequencies[x]++;
                 else
-                    ht.Frequencies.Add((Int32)x, 1);
+                    ht.Frequencies.Add(x, 1);
             }
             ht.Build();
-            return new BitArray(2);
+            //encode
+            BitArray bits = ht.Encode(data);
+            return  bits;
         }
 
         public int[] uncompress(System.Collections.BitArray bits)
@@ -52,7 +44,7 @@ namespace Compresser
             // Leaf
             if (Right == null && Left == null)
             {
-                if (symbol.Equals(this.Symbol))
+                if (symbol==Symbol)
                 {
                     return data;
                 }
@@ -104,7 +96,7 @@ namespace Compresser
         private HeapPriorityQueue<Node> nodes = null;
         public Node Root { get; set; }
         public Dictionary<int, int> Frequencies = new Dictionary<Int32, int>();
-        public Dictionary<int, BitArray> codes = new Dictionary<int, BitArray>();
+        public Dictionary<int, List<bool>> codes = new Dictionary<int, List<bool>>();
         public long Size()
         {
             int size = 0;
@@ -129,12 +121,12 @@ namespace Compresser
 
             while (nodes.Count >= 2)
             {
+                //get the lowest two frequencies
                 Node a = nodes.Dequeue();
                 Node b = nodes.Dequeue();
-                // Create a parent node by combining the frequencies
+                // Create a parent node by summing the frequencies
                 Node parent = new Node()
                 {
-                    
                     frequency = a.frequency + b.frequency,
                     Left = a,
                     Right = b
@@ -151,7 +143,15 @@ namespace Compresser
 
             for (int i = 0; i < source.Length; i++)
             {
-                List<bool> encodedSymbol = this.Root.Traverse(source[i], new List<bool>());
+                int s=source[i];
+                List<bool> encodedSymbol;
+                if(codes.ContainsKey(s)) 
+                encodedSymbol=codes[s];
+                
+                else {
+                    encodedSymbol = this.Root.Traverse(source[i], new List<bool>());
+                    codes.Add(s, encodedSymbol);
+                }
                 encodedSource.AddRange(encodedSymbol);
             }
 
