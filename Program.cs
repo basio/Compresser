@@ -23,15 +23,23 @@ namespace Compresser
             return l.ToArray();
         }
 
-        static long compress(int[] data)
+        static BitArray compress(int[] data)
         {
             ICompress c = new Huffman();
             BitArray bits=c.compress(data);
-            return bits.Length;
+            return bits;
+        }
+        static int[] uncompress(BitArray bits)
+        {
+            ICompress c = new Huffman();
+            return c.uncompress(bits);            
         }
         static void Main(string[] args)
         {
-           Console.WriteLine( compress(Array.ConvertAll( readfile(@"data.txt"),x => (int)x )));
+           BitArray ba= compress(Array.ConvertAll( readfile(@"test.txt"),x => (int)x ));
+           Console.WriteLine(ba.Length);
+           int[] b = uncompress(ba);
+            
         }
     }
 }

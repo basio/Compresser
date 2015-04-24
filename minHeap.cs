@@ -9,18 +9,53 @@ namespace Utils
 {
     public static class Extentions
     {
-       public static List<bool> tobinary(this int x)
+        static public List<bool> Pad(this List<bool> x, int l)
         {
+            List<bool> p=new List<bool>();
+            for(int i=0;i<l-x.Count;i++){
+                p.Add(false);
+            }
+             p.AddRange(x);
+            return p;
+        }
+        static public int ToBinary(this List<bool> l)
+        {
+            int x = 0;
+            for (int i = 0; i < l.Count; i++)
+            {
+                if (l[i] == true)
+                    x = x * 2 + 1;
+                else x = x * 2;
+            }
+            return x;
+        }
+        public static List<bool> subset(this BitArray bits, int l, int len)
+        {
+            List<bool> list = new List<bool>();
+            for (int i = 0; i < len; i++)
+            {
+                list.Add(bits[l + i]);
+            }
+            return list;
+        }
+        public static List<bool> tobinary(this int x, int len)
+        {
+            int y = x;
             List<bool> l = new List<bool>();
             do
             {
                 l.Add(x % 2 == 1);
                 x = x / 2;
             } while (x != 0);
-            return l;
+            l.Reverse();
+            List<bool> padding = new List<bool>();
+            for (int i = 0; i < len - l.Count; i++) padding.Add(false);
+
+            padding.AddRange(l);
+            return padding;
         }
     }
-        
+
     /// <summary>
     /// An implementation of a min-Priority Queue using a heap.  Has O(1) .Contains()!
     /// See https://bitbucket.org/BlueRaja/high-speed-priority-queue-for-c/wiki/Getting%20Started for more information
