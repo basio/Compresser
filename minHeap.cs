@@ -7,6 +7,20 @@ using System.Threading.Tasks;
 
 namespace Utils
 {
+    public static class Extentions
+    {
+       public static List<bool> tobinary(this int x)
+        {
+            List<bool> l = new List<bool>();
+            do
+            {
+                l.Add(x % 2 == 1);
+                x = x / 2;
+            } while (x != 0);
+            return l;
+        }
+    }
+        
     /// <summary>
     /// An implementation of a min-Priority Queue using a heap.  Has O(1) .Contains()!
     /// See https://bitbucket.org/BlueRaja/high-speed-priority-queue-for-c/wiki/Getting%20Started for more information
