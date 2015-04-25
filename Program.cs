@@ -36,7 +36,8 @@ namespace Compresser
         }
         static void Main(string[] args)
         {
-           BitArray ba= compress(Array.ConvertAll( readfile(@"test.txt"),x => (int)x ));
+            var data = Array.ConvertAll(readfile(@"test.txt"), x => (int)x);
+           BitArray ba= compress(data);
            Console.WriteLine(ba.Length);
            int[] b = uncompress(ba);
             

@@ -27,7 +27,10 @@ namespace Utils
                     x = x * 2 + 1;
                 else x = x * 2;
             }
-            return x;
+            if (l.Count == 32)
+                return x - (int.MaxValue / 2);
+            else
+                return x;
         }
         public static List<bool> subset(this BitArray bits, int l, int len)
         {
@@ -40,7 +43,8 @@ namespace Utils
         }
         public static List<bool> tobinary(this int x, int len)
         {
-            int y = x;
+            if(len==32)
+            x = x + (int.MaxValue / 2);
             List<bool> l = new List<bool>();
             do
             {
@@ -54,6 +58,17 @@ namespace Utils
             padding.AddRange(l);
             return padding;
         }
+         public static string String(this List<bool> l)
+        {
+            string s = "";
+            foreach (bool b in l)
+            {
+                if (b == false) s = s + "0";
+                else s = s + "1";
+            }
+            return s;
+        }
+
     }
 
     /// <summary>
