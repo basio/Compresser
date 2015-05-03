@@ -10,13 +10,15 @@ namespace Compresser
 {
     class Program
     {
-        static double[] readfile(string filename)
+        static double[] readfile(string filename,int part)
         {
             List<double> l = new List<double>();
             StreamReader sr = new StreamReader(filename);
             while (!sr.EndOfStream)
             {
-                l.Add(Double.Parse(sr.ReadLine()));
+                string line = sr.ReadLine();
+                var parts = line.Split(',');
+                l.Add(Double.Parse(parts[part]));
             }
 
             sr.Close();
